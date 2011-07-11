@@ -3,6 +3,7 @@
 from pyguane.resources.resourcefactory import ResourceFactory
 from pyguane.gameobjects.gameobject import GameObject
 
+from pyguane.physics.constants import BOX2D_UNITS_SYSTEM
 
 from math import sqrt, floor
 
@@ -20,21 +21,29 @@ class NPC(GameObject):
         
         self._sprite.current_frame = "%s_rf" % self._sub_symbol
         
-        self._speed = 80.0
+        self._speed = 89.5
         self._anim_speed = 180
         self._sprite.mobile = True
         
-        print self.body.body
-        #sprint filter
+        self._last_body_position = self.body.position
+        
+        #print self.body.body
 
     def update(self, tick):
         if not self._body.is_sleeping:
+            lpx, lpy = self._last_body_position
             px, py = self._body.position
-            px = floor(px)
-            py = floor(py)
-            self.sprite.moveToIP(px, py)
+            
+            dx, dy = px - lpx, py - lpy
+            print px, py, lpx, lpy
+            px, py = px / BOX2D_UNITS_SYSTEM, py / BOX2D_UNITS_SYSTEM
+            
+            px = floor(px)#/ BOX2D_UNITS_SYSTEM)
+            py = floor(py)#/ BOX2D_UNITS_SYSTEM)
+            self.sprite.moveToIP(px , py)
             self.sprite.rect = self.sprite.position
             self.sprite.dirty = 1
+            self._last_body_position = self.body.position
         
         
     @property
@@ -46,8 +55,8 @@ class NPC(GameObject):
     def move(self, dx, dy):   
         if dx != 0 or dy != 0:
             self._body.wakeUp()
-            #self._body.setLinearVelocity((dx, dy))   
-            self._body.applyImpulse((dx, dy))         
+            self._body.setLinearVelocity((dx, dy))   
+            #self._body.applyImpulse((dx, dy))         
             #move the sprite
             return True
         else:
@@ -117,7 +126,7 @@ class Mousse(NPC):
         moved = self.move(dx, dy)       
         if not moved:
             self._sprite.stopClip()
-            #self._body.setLinearVelocity((0, 0))
+            self._body.setLinearVelocity((0, 0))
             
     
     

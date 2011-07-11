@@ -128,7 +128,7 @@ def makeRoom(res, nb_w, nb_h, location=default_location, spr=room_sprites):
 #==============================================================    
 #                       main map
 #==============================================================    
-sequences = makeRoom("cave", 45, 18, {"kind": "absolute", "pos": (55, 85)})
+sequences = makeRoom("cave", 24, 14, {"kind": "absolute", "pos": (55, 85)})
 
 map_data = {
     
@@ -163,8 +163,8 @@ map_data = {
 
     
     'free' : [
-        #{"symbol": "cave_mid_45", "pos" : (451,367), "layer": 50},
-        #{"symbol": "cave_mid_45", "pos" : (497,413), "layer": 50},     
+        {"symbol": "cave_mid_45", "pos" : (451, 367), "layer": 50},
+        {"symbol": "cave_mid_45", "pos" : (497, 413), "layer": 50},
     ]           
                    
   
@@ -177,8 +177,9 @@ map_data = {
 #with open("media/map_data.json", "w") as f:
 #    json.dump(map_data, f, ensure_ascii=True, separators=(',',':'))
     
-with open("media/scrolling_map_data.dump", "w") as f:
+with open("media/map_data.dump", "w") as f:
     cPickle.dump(map_data, f)
+
 
     
     

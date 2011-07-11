@@ -6,19 +6,18 @@ Created by Julien Pilla on 2010-05-20.
 """
 
 
+from mousse import Mousse
 from pygame.color import Color
 from pygame.display import flip as displayFlip
 from pygame.mouse import set_visible as setMouseVisible
-
+from pyguane.core.gamestate import TimeLockedState
 from pyguane.core.window import Window
 from pyguane.game import Game
-
 from pyguane.map.tilemap import TileMap
 from pyguane.resources.resourcefactory import ResourceFactory
 from pyguane.widgets.label import Label
-from pyguane.core.gamestate import TimeLockedState
+from pyguane.camera import Camera
 
-from mousse import Mousse
 
 #"TODO: regarder les collision filtering b2Shape.SetFilterData"
 
@@ -27,8 +26,8 @@ GREY = (242, 242, 242)
 
 
 class PlayingState(TimeLockedState):
-    def __init__(self, game, lock):
-        super(PlayingState, self).__init__(lock=lock)
+    def __init__(self, game,):
+        super(PlayingState, self).__init__(lock=2000)
         self._timer = 0
         self._game = game
         setMouseVisible(False)
@@ -49,16 +48,18 @@ class PlayingState(TimeLockedState):
         mousse = Mousse("characters", "00", (200, 200), 100)
         puppet = Mousse("characters", "00", (300, 180), 100)
 
-
         self._game.addObjects("map", tiles)
         self._game.addObjects("characters", [mousse, puppet])
+        self._game.addObjects("camera", Camera())
         
-        self._game.observeKeyboard(mousse.keyboard)
-        
+        self._camera = Camera()
+        self._game.addObjects("camera", self._camera)
+
+        self._game.observeKeyboard(mousse.keyboard, self.keyboard)
         #destroy the loading screen
         self._game.sprite_factory.delSpritesFromKind("widget.label.loading")
         displayFlip()
-
+        
         
     @property
     def time(self): 
@@ -72,15 +73,17 @@ class PlayingState(TimeLockedState):
         self._game.updateObjects(tick)        
         self._game.physic_world.step(1.0 / 60.0, 10, 8)
         self._game.sprite_factory.update("*", tick)
-
+        
+    def keyboard(self, keysdown, keysup):
+        if "k" in keysdown:
+            self._camera.moveIP(6, 0)
+        elif "l" in keysdown:
+            self._camera.moveIP(-6, 0)
 
     def release(self):
         self._game.delObjects("map")
         self._game.delObjects("characters") 
-            
-
-
-
+        self._game.delObjects("camera")
 
 
 
@@ -89,15 +92,14 @@ class Simulation(Game):
     def __init__(self, w, h):
         super(Simulation, self).__init__(w, h)
         Window().bgd = Color(*GREY)
-        Window().caption = "Yet Another Multilayer Perceptron: a driving simulation"
+        Window().caption = "Pyguane: Sandbox level"
         ResourceFactory("media/resources.json")
                 
         self.observeKeyboard(self.myMainKeyboard)
         self.updateWorld(self.updateGame) 
 
         #self.state_manager.set(LoadingState, game=self)
-        self.state_manager.set(PlayingState, game=self, lock=2000)  
-        
+        self.state_manager.set(PlayingState, game=self)  
         #self._labels = {"Time" : Label(16, 12, 22, color=BLUE), }
         #self.addObjects("widgets.label", self._labels.values())
                 
@@ -113,14 +115,9 @@ class Simulation(Game):
     def updateGame(self):
         tick = self.clock.tick()            
         self.state_manager.update(tick=tick)  
-        #===============================
-        #       maj des labels
-        #===============================
-        #self._labels["Time"].text = "Time:  %i" % 42
         
     def myMainKeyboard(self, keysdown, keysup):
         if "escape" in keysdown:
-            #print self," exits !"
             self.stop()
             
         if "d" in keysdown:
@@ -133,7 +130,7 @@ class Simulation(Game):
             self.state_manager.pop()
 
         if "o" in keysdown:
-            self.state_manager.set(PlayingState, game=self, lock=2000)
+            self.state_manager.set(PlayingState, game=self)
             self.rebootQuadTree()
 
             

@@ -1,3 +1,5 @@
-#Mon Jul 11 10:46:52 CEST 2011
+#Mon Jul 11 15:30:15 CEST 2011
 eclipse.preferences.version=1
+encoding//src/mousse.py=utf-8
 encoding//src/simu.py=utf-8
+encoding//src/test_scrolling.py=utf-8
