@@ -18,7 +18,7 @@ resources = {
                       
     "characters" : {"filename" : "media/charset.png", "kind" : "main.characters",
         "area" : (0, 0, 16, 25), #pour le body bounding rect car pas de mesh
-        "body" : { "mass" : 10.0  },
+        "body" : { "mass" : 10.0, "type" : "dynamic"  },
         "animations" : {
             "frames" : {
                 # the topleft red pirate
@@ -163,8 +163,8 @@ map_data = {
 
     
     'free' : [
-        {"symbol": "cave_mid_45", "pos" : (451, 367), "layer": 50},
-        {"symbol": "cave_mid_45", "pos" : (497, 413), "layer": 50},
+        #{"symbol": "cave_mid_45", "pos" : (451, 367), "layer": 50},
+        #{"symbol": "cave_mid_45", "pos" : (497, 413), "layer": 50},
     ]           
                    
   

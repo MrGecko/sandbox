@@ -21,7 +21,7 @@ class NPC(GameObject):
         
         self._sprite.current_frame = "%s_rf" % self._sub_symbol
         
-        self._speed = 89.5
+        self._speed = 13.5
         self._anim_speed = 180
         self._sprite.mobile = True
         
@@ -30,12 +30,12 @@ class NPC(GameObject):
         #print self.body.body
 
     def update(self, tick):
-        if not self._body.is_sleeping:
+        #if not self._body.is_sleeping:
             lpx, lpy = self._last_body_position
             px, py = self._body.position
             
             dx, dy = px - lpx, py - lpy
-            print px, py, lpx, lpy
+            #print px, py
             px, py = px / BOX2D_UNITS_SYSTEM, py / BOX2D_UNITS_SYSTEM
             
             px = floor(px)#/ BOX2D_UNITS_SYSTEM)
@@ -53,15 +53,8 @@ class NPC(GameObject):
     def body(self): return self._body
     
     def move(self, dx, dy):   
-        if dx != 0 or dy != 0:
-            self._body.wakeUp()
-            self._body.setLinearVelocity((dx, dy))   
-            #self._body.applyImpulse((dx, dy))         
-            #move the sprite
-            return True
-        else:
-            return False
-        
+        self._body.setLinearVelocity((dx, dy))   
+
 
         
     def _walkRight(self):
@@ -123,10 +116,10 @@ class Mousse(NPC):
                 
 
 
-        moved = self.move(dx, dy)       
-        if not moved:
+        self.move(dx, dy)       
+        if dx == 0 and dy == 0:
             self._sprite.stopClip()
-            self._body.setLinearVelocity((0, 0))
+            #self._body.setLinearVelocity((0, 0))
             
     
     

@@ -19,6 +19,7 @@ from pyguane.widgets.label import Label
 from pyguane.camera import Camera
 
 
+
 #"TODO: regarder les collision filtering b2Shape.SetFilterData"
 
 BLUE = (8, 69, 133)
