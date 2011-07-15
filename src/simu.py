@@ -47,11 +47,10 @@ class PlayingState(TimeLockedState):
         #load game data
         tiles = TileMap("media/map_data.dump").tiles
         mousse = Mousse("characters", "00", (200, 200), 100)
-        puppet = Mousse("characters", "00", (300, 180), 100)
+        #puppet = Mousse("characters", "00", (300, 180), 100)
 
         self._game.addObjects("map", tiles)
-        self._game.addObjects("characters", [mousse, puppet])
-        self._game.addObjects("camera", Camera())
+        self._game.addObjects("characters", mousse)
         
         self._camera = Camera()
         self._game.addObjects("camera", self._camera)
@@ -71,7 +70,7 @@ class PlayingState(TimeLockedState):
         tick = kwargs["tick"]
         self._timer += tick
 
-        self._game.updateObjects(tick)        
+        self._game.updateObjects(tick=tick, delta=self._camera.delta)        
         self._game.physic_world.step(1.0 / 60.0, 10, 8)
         self._game.sprite_factory.update("*", tick)
         
@@ -85,8 +84,7 @@ class PlayingState(TimeLockedState):
         self._game.delObjects("map")
         self._game.delObjects("characters") 
         self._game.delObjects("camera")
-
-
+        
 
 
 class Simulation(Game):
@@ -99,7 +97,6 @@ class Simulation(Game):
         self.observeKeyboard(self.myMainKeyboard)
         self.updateWorld(self.updateGame) 
 
-        #self.state_manager.set(LoadingState, game=self)
         self.state_manager.set(PlayingState, game=self)  
         #self._labels = {"Time" : Label(16, 12, 22, color=BLUE), }
         #self.addObjects("widgets.label", self._labels.values())

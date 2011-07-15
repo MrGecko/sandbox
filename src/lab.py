@@ -3,7 +3,7 @@ import json
 from random import choice , sample, randint   
 from pygame.rect import Rect
 from pprint import pprint
-import itertools
+#import itertools
 
 import cPickle
 
@@ -163,8 +163,8 @@ map_data = {
 
     
     'free' : [
-        #{"symbol": "cave_mid_45", "pos" : (451, 367), "layer": 50},
-        #{"symbol": "cave_mid_45", "pos" : (497, 413), "layer": 50},
+        {"symbol": "cave_mid_45", "pos" : (451, 367), "layer": 50},
+        {"symbol": "cave_mid_45", "pos" : (497, 413), "layer": 50},
     ]           
                    
   

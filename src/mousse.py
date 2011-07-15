@@ -21,31 +21,24 @@ class NPC(GameObject):
         
         self._sprite.current_frame = "%s_rf" % self._sub_symbol
         
-        self._speed = 13.5
+        self._speed = 16.5
         self._anim_speed = 180
         self._sprite.mobile = True
         
-        self._last_body_position = self.body.position
-        
-        #print self.body.body
+        self._moved = True
 
-    def update(self, tick):
-        #if not self._body.is_sleeping:
-            lpx, lpy = self._last_body_position
-            px, py = self._body.position
-            
-            dx, dy = px - lpx, py - lpy
-            #print px, py
-            px, py = px / BOX2D_UNITS_SYSTEM, py / BOX2D_UNITS_SYSTEM
-            
-            px = floor(px)#/ BOX2D_UNITS_SYSTEM)
-            py = floor(py)#/ BOX2D_UNITS_SYSTEM)
-            self.sprite.moveToIP(px , py)
-            self.sprite.rect = self.sprite.position
-            self.sprite.dirty = 1
-            self._last_body_position = self.body.position
+    def update(self, tick, delta):
+        px, py = self._body.position
+        px, py = px / BOX2D_UNITS_SYSTEM, py / BOX2D_UNITS_SYSTEM
+        px = floor(px)#/ BOX2D_UNITS_SYSTEM)
+        py = floor(py)#/ BOX2D_UNITS_SYSTEM)
         
-        
+        self.sprite.moveToIP(px , py)
+        if self._moved:            
+            dx, dy = delta #delta camera
+            self.sprite.rect.move_ip(dx + self.sprite.position.left - self.sprite.rect.left,
+                                     dy + self.sprite.position.top - self.sprite.rect.top)
+    
     @property
     def sprite(self): return self._sprite
     
@@ -53,7 +46,8 @@ class NPC(GameObject):
     def body(self): return self._body
     
     def move(self, dx, dy):   
-        self._body.setLinearVelocity((dx, dy))   
+        self._body.setLinearVelocity((dx, dy)) 
+        return (dx != 0) or (dy != 0)  
 
 
         
@@ -103,7 +97,6 @@ class Mousse(NPC):
                 if "left" not in keysdown and "right" not in keysdown:
                     dy = -step
                 else:
-                    
                     dy = -step / sqrt(2.0)
             
             
@@ -116,8 +109,8 @@ class Mousse(NPC):
                 
 
 
-        self.move(dx, dy)       
-        if dx == 0 and dy == 0:
+        self._moved = self.move(dx, dy)       
+        if not self._moved:
             self._sprite.stopClip()
             #self._body.setLinearVelocity((0, 0))
             
