@@ -21,8 +21,8 @@ class NPC(GameObject):
         
         self._sprite.current_frame = "%s_rf" % self._sub_symbol
         
-        self._speed = 16.5
-        self._anim_speed = 180
+        self._speed = 15.5
+        self._anim_speed = 150
         self._sprite.mobile = True
         
         self._moved = True
@@ -33,6 +33,9 @@ class NPC(GameObject):
         px = floor(px)#/ BOX2D_UNITS_SYSTEM)
         py = floor(py)#/ BOX2D_UNITS_SYSTEM)
         
+        px -= self._body.relative_body_position[0]
+        py -= self._body.relative_body_position[1]
+
         self.sprite.moveToIP(px , py)
         if self._moved:            
             dx, dy = delta #delta camera

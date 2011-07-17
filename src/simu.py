@@ -24,11 +24,13 @@ from pyguane.camera import Camera
 
 BLUE = (8, 69, 133)
 GREY = (242, 242, 242)
+GREEN_LEAF = (110, 153, 67)
+BROWN_EARTH = (94, 56, 34)
 
 
 class PlayingState(TimeLockedState):
     def __init__(self, game,):
-        super(PlayingState, self).__init__(lock=2000)
+        super(PlayingState, self).__init__(lock=1000)
         self._timer = 0
         self._game = game
         setMouseVisible(False)
@@ -46,7 +48,7 @@ class PlayingState(TimeLockedState):
         
         #load game data
         tiles = TileMap("media/map_data.dump").tiles
-        mousse = Mousse("characters", "00", (200, 200), 100)
+        mousse = Mousse("renard", "00", (20, 210), 100)
         #puppet = Mousse("characters", "00", (300, 180), 100)
 
         self._game.addObjects("map", tiles)
@@ -58,6 +60,7 @@ class PlayingState(TimeLockedState):
         self._game.observeKeyboard(mousse.keyboard, self.keyboard)
         #destroy the loading screen
         self._game.sprite_factory.delSpritesFromKind("widget.label.loading")
+        Window().bgd = BROWN_EARTH
         displayFlip()
         
         
@@ -71,14 +74,14 @@ class PlayingState(TimeLockedState):
         self._timer += tick
 
         self._game.updateObjects(tick=tick, delta=self._camera.delta)        
-        self._game.physic_world.step(1.0 / 60.0, 10, 8)
+        self._game.physic_world.step(1.0 / 60.0, 6, 6)
         self._game.sprite_factory.update("*", tick)
         
     def keyboard(self, keysdown, keysup):
         if "k" in keysdown:
-            self._camera.moveIP(6, 0)
+            self._camera.moveIP(17, 0)
         elif "l" in keysdown:
-            self._camera.moveIP(-6, 0)
+            self._camera.moveIP(-17, 0)
 
     def release(self):
         self._game.delObjects("map")
