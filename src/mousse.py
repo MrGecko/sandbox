@@ -15,9 +15,9 @@ class NPC(GameObject):
         super(NPC, self).__init__()
         self._sprite = ResourceFactory().makeSpriteFromSymbol(symbol, x, y, layer)
 
-        self._body = ResourceFactory().makeBodyFromSymbol(symbol, x, y)
-        if self._body is not None:
-            self._body.user_data = self
+        self._solid = ResourceFactory().makeSolidFromSymbol(symbol, x, y)
+        if self._solid.body is not None:
+            self._solid.body.user_data = self
 
         self._speed = 19.5
         self._anim_speed = 130
@@ -26,11 +26,11 @@ class NPC(GameObject):
         self._moved = True
 
     def update(self, tick, delta):
-        if self._body is not None:
-            px, py = self._body.position
+        if self._solid.body is not None:
+            px, py = self._solid.body.position
             px, py = px / BOX2D_UNITS_SYSTEM, py / BOX2D_UNITS_SYSTEM
-            px = floor(px - self._body.relative_body_position[0])
-            py = floor(py - self._body.relative_body_position[1])
+            px = floor(px - self._solid.relative_position[0])
+            py = floor(py - self._solid.relative_position[1])
 
             self.sprite.moveToIP(px , py)
             if self._moved:            
@@ -42,10 +42,10 @@ class NPC(GameObject):
     def sprite(self): return self._sprite
     
     @property
-    def body(self): return self._body
+    def body(self): return self._solid.body
     
     def move(self, dx, dy):   
-        self._body.setLinearVelocity((dx, dy)) 
+        self._solid.body.linearVelocity = (dx, dy) 
         return (dx != 0) or (dy != 0)  
 
 
