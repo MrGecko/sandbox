@@ -37,7 +37,7 @@ resources = {
             
             "terrain" : { "area" : (70, 215, 50, 20), "body" : None},
             "terrain_vide" : { "area" : (70, 236, 24, 20), "body" : None},
-            "trou" : {"area": (210, 215, 50, 20), "body": None},
+            "trou" : {"area": (120, 215, 50, 20), "body": None},
             "navet" : {"area" : (142, 184, 23, 29), "body" : {"type" : "dynamic", "mass" : 500.0} },
             "carotte" : {"area" : (122, 179, 12, 35), "body" : {"type" : "dynamic", "mass" : 500.0} },
         }    
@@ -118,7 +118,10 @@ map_data = {
         #{"symbol": "poulailler_barraque_A", "pos" : (431, 200), "layer": 150},
         #{"symbol": "poulailler_barraque_B", "pos" : (455, 280), "layer": 49},
 
-        #{"symbol": "cave_mid_45", "pos" : (497, 413), "layer": 50},
+        #{"symbol": "poulailler_trou", "pos" : (472, 213), "layer": 92},
+        #{"symbol": "poulailler_trou", "pos" : (122, 513), "layer": 92},
+        #{"symbol": "poulailler_trou", "pos" : (422, 293), "layer": 92},
+        #{"symbol": "poulailler_trou", "pos" : (272, 190), "layer": 92},
     ]           
                    
   

@@ -6,8 +6,8 @@ Created by Julien Pilla on 2010-05-20.
 """
 
 
-from mousse import Mousse
-from pygame.color import Color
+from mousse import Mousse, VegSpawner
+from pygame.color import Color #@UnresolvedImport
 from pygame.display import flip as displayFlip
 from pygame.mouse import set_visible as setMouseVisible
 from pyguane.core.gamestate import TimeLockedState
@@ -18,6 +18,7 @@ from pyguane.resources.resourcefactory import ResourceFactory
 from pyguane.widgets.label import Label
 from pyguane.camera import Camera
 
+from random import randint
 
 
 #"TODO: regarder les collision filtering b2Shape.SetFilterData"
@@ -49,10 +50,18 @@ class PlayingState(TimeLockedState):
         #load game data
         tiles = TileMap("media/map_data.dump").tiles
         mousse = Mousse("renard", "00", (20, 210), 100)
-        #puppet = Mousse("characters", "00", (300, 180), 100)
+        
+        vegetables = ["carotte", "navet"]
+        veg_spawners = []
+        for i in range(1, 24):
+            veg_spawners.append(VegSpawner("poulailler_%s" % (vegetables[randint(0, len(vegetables) - 1)]),
+                                            (90 + randint(30, 720), 170 + randint(-80, 320)), 98))
+        
 
         self._game.addObjects("map", tiles)
         self._game.addObjects("characters", mousse)
+        self._game.addObjects("items", veg_spawners)
+
         
         self._camera = Camera()
         self._game.addObjects("camera", self._camera)
@@ -84,6 +93,7 @@ class PlayingState(TimeLockedState):
             self._camera.moveIP(-17, 0)
 
     def release(self):
+        self._game.delObjects("items")
         self._game.delObjects("map")
         self._game.delObjects("characters") 
         self._game.delObjects("camera")
